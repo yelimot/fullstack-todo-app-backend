@@ -8,8 +8,8 @@ import (
 
 	"github.com/gorilla/mux"
 
-	"github.com/yelimot/fullstack-todo-app/todo-app-backend/pkg/api/response"
-	"github.com/yelimot/fullstack-todo-app/todo-app-backend/pkg/model"
+	"github.com/yelimot/fullstack-todo-app-backend/pkg/api/response"
+	"github.com/yelimot/fullstack-todo-app-backend/pkg/model"
 )
 
 func (a *API) GetTodo(w http.ResponseWriter, r *http.Request) {

@@ -7,15 +7,15 @@ import (
 	"os"
 
 	"github.com/sirupsen/logrus"
-	"github.com/yelimot/fullstack-todo-app/todo-app-backend/pkg/api"
-	"github.com/yelimot/fullstack-todo-app/todo-app-backend/pkg/app"
-	"github.com/yelimot/fullstack-todo-app/todo-app-backend/pkg/repository"
-	"github.com/yelimot/fullstack-todo-app/todo-app-backend/pkg/version"
+	"github.com/yelimot/fullstack-todo-app-backend/pkg/api"
+	"github.com/yelimot/fullstack-todo-app-backend/pkg/app"
+	"github.com/yelimot/fullstack-todo-app-backend/pkg/repository"
+	"github.com/yelimot/fullstack-todo-app-backend/pkg/version"
 	"gopkg.in/yaml.v2"
 )
 
 var (
-	backupFileFlag = flag.String("backup", "backup.json", "Backup file")
+	backupFileFlag = flag.String("backup", "backup.json", "Backup file.")
 	configFileFlag = flag.String("config", "config.yml", "Path to the configuration file.")
 	logFileFlag    = flag.String("log", "todo.log", "Path to the log file.")
 	debugFlag      = flag.Bool("debug", false, "Show debug information.")
@@ -80,7 +80,6 @@ func main() {
 	appInstance := app.New(repo)
 
 	// Create a new api
-	// TODO add api config
 	apiInstance, err := api.New(&cfg, appInstance)
 	if err != nil {
 		panic(err)

@@ -7,7 +7,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
-	"github.com/yelimot/fullstack-todo-app/todo-app-backend/pkg/app"
+	"github.com/yelimot/fullstack-todo-app-backend/pkg/app"
 )
 
 // API configuration
