@@ -11,7 +11,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
-	"github.com/yelimot/fullstack-todo-app/todo-app-backend/pkg/model"
+	"github.com/yelimot/fullstack-todo-app-backend/pkg/model"
 )
 
 type Repository interface {
@@ -32,9 +32,8 @@ type Repository interface {
 var _ Repository = (*repositoryImpl)(nil)
 
 type repositoryImpl struct {
-	mtx   sync.Mutex
-	todos []*model.Todo
-
+	mtx    sync.Mutex
+	todos  []*model.Todo
 	backup *os.File
 }
 

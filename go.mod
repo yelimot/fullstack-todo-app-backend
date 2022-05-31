@@ -1,4 +1,4 @@
-module github.com/yelimot/fullstack-todo-app/todo-app-backend
+module github.com/yelimot/fullstack-todo-app-backend
 
 go 1.17
 
