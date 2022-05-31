@@ -34,7 +34,7 @@ The project was created with Go on backend and React & TypeScript on frontend.
   
 ### Steps to build and run backend:
 
-After clone this repository, change directory to todo-app-backend then build and execute the project.
+After clone this repository, change directory to fullstack-todo-app-backend then build and execute the project.
 For example (remove .exe on linux):
 <pre>
 cd todo-app-backend
@@ -99,3 +99,5 @@ Request body:
 - /api/v1/todos{id}
 
 path variable: id
+
+Click [here](https://github.com/yelimot/fullstack-todo-app-frontend) to see the frontend source code.
