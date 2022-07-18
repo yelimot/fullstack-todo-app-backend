@@ -37,7 +37,7 @@ The project was created with Go on backend and React & TypeScript on frontend.
 After clone this repository, change directory to fullstack-todo-app-backend then build and execute the project.
 For example (remove .exe on linux):
 <pre>
-cd todo-app-backend
+cd fullstack-todo-app-backend
 go build -o bin/todo.exe cmd/todo/todo.go
 ./bin/todo.exe
 </pre>
