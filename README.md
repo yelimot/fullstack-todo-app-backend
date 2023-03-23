@@ -8,7 +8,7 @@ This is a todo web app with functionalities such as
 The project was created with Go on backend and React & TypeScript on frontend.
 
 ## Backend:
-### Techologies:
+### Technologies:
 **Go** with some **standard libraries (net/http, encoding/json, errors)** and **external packages (gorilla/mux, sirupsen/logrus, google/uuid)**.
  
 -	Go is a robust system-level language used for programming across large-scale network servers and big distributed systems. 
