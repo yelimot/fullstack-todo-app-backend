@@ -32,21 +32,21 @@ type Repository interface {
 var _ Repository = (*repositoryImpl)(nil)
 
 type repositoryImpl struct {
-	mtx    sync.Mutex
-	todos  []*model.Todo
-	backup *os.File
+	mtx   sync.Mutex
+	todos []*model.Todo
+	db    *os.File
 }
 
-func New(backup *os.File) (Repository, error) {
+func New(db *os.File) (Repository, error) {
 	var todos []*model.Todo
-	dec := json.NewDecoder(backup)
+	dec := json.NewDecoder(db)
 	if err := dec.Decode(&todos); err != nil && err != io.EOF {
 		return nil, err
 	}
 
 	return &repositoryImpl{
-		backup: backup,
-		todos:  todos,
+		db:    db,
+		todos: todos,
 	}, nil
 }
 
@@ -60,7 +60,7 @@ func (r *repositoryImpl) Create(todo *model.Todo) error {
 
 	r.todos = append(r.todos, todo)
 
-	if err := r.updateBackup(); err != nil {
+	if err := r.updateDb(); err != nil {
 		return err
 	}
 
@@ -169,7 +169,7 @@ func (r *repositoryImpl) Update(todo *model.Todo) error {
 	for i, t := range r.todos {
 		if t.ID == todo.ID {
 			r.todos[i] = todo
-			if err := r.updateBackup(); err != nil {
+			if err := r.updateDb(); err != nil {
 				return err
 			}
 			return nil
@@ -187,7 +187,7 @@ func (r *repositoryImpl) Delete(id int) error {
 	for i, t := range r.todos {
 		if t.ID == id {
 			r.todos = append(r.todos[:i], r.todos[i+1:]...)
-			if err := r.updateBackup(); err != nil {
+			if err := r.updateDb(); err != nil {
 				return err
 			}
 			return nil
@@ -197,21 +197,21 @@ func (r *repositoryImpl) Delete(id int) error {
 	return errors.New("todo not found")
 }
 
-func (r *repositoryImpl) updateBackup() error {
+func (r *repositoryImpl) updateDb() error {
 
-	err := r.backup.Truncate(0)
+	err := r.db.Truncate(0)
 	if err != nil {
 		logrus.Infof("%v - 1", err)
 		return err
 	}
 
-	_, err = r.backup.Seek(0, 0)
+	_, err = r.db.Seek(0, 0)
 	if err != nil {
 		logrus.Infof("%v - 2", err)
 		return err
 	}
 
-	enc := json.NewEncoder(r.backup)
+	enc := json.NewEncoder(r.db)
 	if err := enc.Encode(r.todos); err != nil {
 		return err
 	}
@@ -220,5 +220,5 @@ func (r *repositoryImpl) updateBackup() error {
 }
 
 func (r *repositoryImpl) Shutdown() error {
-	return r.backup.Close()
+	return r.db.Close()
 }

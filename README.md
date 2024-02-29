@@ -29,7 +29,7 @@ The project was created with Go on backend and React & TypeScript on frontend.
           ├── model         // model corresponds witf frontend
           ├── repository    // interacts with db
           └── version       // informations needed build-time
-      ├── backup.json       // json db
+      ├── db.json           // json db
       ├── config.yaml       // configurations
       ├── go.mod            // the root of dependency management
       ├── go.sum            // checksums of the specific module versions

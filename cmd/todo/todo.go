@@ -15,7 +15,7 @@ import (
 )
 
 var (
-	backupFileFlag = flag.String("backup", "backup.json", "Backup file.")
+	dbFileFlag     = flag.String("db", "db.json", "Db file.")
 	configFileFlag = flag.String("config", "config.yml", "Path to the configuration file.")
 	logFileFlag    = flag.String("log", "todo.log", "Path to the log file.")
 	debugFlag      = flag.Bool("debug", false, "Show debug information.")
@@ -66,12 +66,12 @@ func main() {
 		logrus.WithError(err).Fatal("Could not load configuration")
 	}
 
-	backupFile, err := os.OpenFile(*backupFileFlag, os.O_CREATE|os.O_RDWR, 0777)
+	dbFile, err := os.OpenFile(*dbFileFlag, os.O_CREATE|os.O_RDWR, 0777)
 	if err != nil {
-		logrus.WithError(err).Fatal("Could not open log file")
+		logrus.WithError(err).Fatal("Could not open db file")
 	}
 
-	repo, err := repository.New(backupFile)
+	repo, err := repository.New(dbFile)
 	if err != nil {
 		logrus.WithError(err).Fatal("Could not create repository")
 	}

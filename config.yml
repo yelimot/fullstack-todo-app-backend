@@ -1,1 +1,2 @@
 addr: :7576
+mongoaddr: mongodb://localhost:27017
