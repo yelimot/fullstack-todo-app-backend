@@ -1,6 +1,6 @@
 module github.com/yelimot/fullstack-todo-app-backend
 
-go 1.17
+go 1.21
 
 require (
 	github.com/google/uuid v1.6.0
