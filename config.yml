@@ -1,2 +1,3 @@
 addr: :7576
+dbtype: mongo
 mongoaddr: mongodb://localhost:27017

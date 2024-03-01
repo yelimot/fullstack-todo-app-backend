@@ -12,7 +12,9 @@ import (
 
 // API configuration
 type Config struct {
-	Addr string `yaml:"addr"`
+	Addr      string `yaml:"addr"`
+	DbType    string `yaml:"dbtype"`
+	MongoAddr string `yaml:"mongoaddr"`
 }
 
 type API struct {

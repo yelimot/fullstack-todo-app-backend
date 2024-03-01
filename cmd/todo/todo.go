@@ -1,9 +1,9 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"os"
 
 	"github.com/sirupsen/logrus"
@@ -11,6 +11,8 @@ import (
 	"github.com/yelimot/fullstack-todo-app-backend/pkg/app"
 	"github.com/yelimot/fullstack-todo-app-backend/pkg/repository"
 	"github.com/yelimot/fullstack-todo-app-backend/pkg/version"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"gopkg.in/yaml.v2"
 )
 
@@ -56,9 +58,9 @@ func main() {
 	}
 
 	// Load configuration file
-	data, err := ioutil.ReadFile(*configFileFlag)
+	data, err := os.ReadFile(*configFileFlag)
 	if err != nil {
-		logrus.WithError(err).Fatal("Could not load configuration")
+		logrus.WithError(err).Fatal("Could not read configuration")
 	}
 	var cfg api.Config
 	err = yaml.Unmarshal(data, &cfg)
@@ -66,20 +68,38 @@ func main() {
 		logrus.WithError(err).Fatal("Could not load configuration")
 	}
 
-	dbFile, err := os.OpenFile(*dbFileFlag, os.O_CREATE|os.O_RDWR, 0777)
-	if err != nil {
-		logrus.WithError(err).Fatal("Could not open db file")
+	// Get database type from configuration
+	dbType := cfg.DbType
+
+	var repo repository.Repository
+	if dbType == "json" {
+		dbFile, err := os.OpenFile(*dbFileFlag, os.O_CREATE|os.O_RDWR, 0777)
+		if err != nil {
+			logrus.WithError(err).Fatal("Could not open db file")
+		}
+		repo, err = repository.New(dbFile)
+		if err != nil {
+			logrus.WithError(err).Fatal("Could not create json repository")
+		}
+	} else if dbType == "mongo" {
+		// Create MongoDB client
+		client, err := mongo.Connect(context.Background(), options.Client().ApplyURI(cfg.MongoAddr))
+		if err != nil {
+			logrus.WithError(err).Fatal("Could not connect to MongoDB")
+		}
+		defer client.Disconnect(context.Background())
+		repo, err = repository.New(client)
+		if err != nil {
+			logrus.WithError(err).Fatal("Could not create mongo repository")
+		}
+	} else {
+		logrus.Fatal("Unsupported database type")
 	}
 
-	repo, err := repository.New(dbFile)
-	if err != nil {
-		logrus.WithError(err).Fatal("Could not create repository")
-	}
-
-	// Create a new todo app
+	// Create new todo app
 	appInstance := app.New(repo)
 
-	// Create a new api
+	// Create new api
 	apiInstance, err := api.New(&cfg, appInstance)
 	if err != nil {
 		panic(err)
